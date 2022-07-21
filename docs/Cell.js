@@ -3,12 +3,6 @@ export class Cell {
         this.x = row;
         this.y = col;
     }
-    getX() {
-        return this.x;
-    }
-    getY() {
-        return this.y;
-    }
     equals(cell) {
         return (cell.x === this.x && cell.y === this.y);
     }

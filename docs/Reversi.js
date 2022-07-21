@@ -1,14 +1,14 @@
 import {Cell} from "./Cell.js";
-import {Jogador} from "./Jogador.js";
 import {Player} from "./Player.js";
 import {CellState} from "./CellState.js";
+import {Winner} from "./Winner.js";
+import {CellMoves} from "./CellMoves.js";
 
 function Reversi(nrows, ncols) {
     const rows = nrows;
     const cols = ncols;
     let turn = Player.PLAYER2;
     let board = startBoard();
-    let mensagem = "";
 
     function startBoard() {
         let matrix = Array(rows).fill().map(() => Array(cols).fill(CellState.EMPTY));
@@ -25,100 +25,62 @@ function Reversi(nrows, ncols) {
         return board;
     }
 
-    function mudarVez() {
-        turn = (turn === Player.PLAYER1) ? Player.PLAYER2 : Player.PLAYER1;
-    }
-
     function getTurn() {
         return turn;
     }
 
-    function qtdDePecas(peca) {
+    function countPieces(peca) {
         return board.flat().reduce((a, b) => a + (b === peca ? 1 : 0), 0);
     }
 
-    function casasPossiveis(player) {
-        return board.flat().reduce((acc, cur, i) => acc + ((cur === CellState.EMPTY) ? mudarPecas(player, new Cell(Math.floor(i / cols), i % cols)).length : 0), 0);
-    }
-
-    function testarJogada(player, endCell) {
-        let {x, y} = endCell;
-        /* Não é a sua vez de jogar? */
-        if ((player === Player.PLAYER2 && turn === Player.PLAYER1) || (player === Player.PLAYER1 && turn === Player.PLAYER2)) {
-            return false;
-        }
-        /* Célula não está no tabuleiro? */
-        if (!onBoard(endCell)) {
-            return false;
-        }
-        /* Célula não está vazia? */
-        if (board[x][y] !== CellState.EMPTY) {
-            return false;
-        }
-        /* Célula não muda peças do adversário? */
-        if (mudarPecas(player, endCell).length === 0) {
-            return false;
-        }
-        return true;
-    }
-
-    function mudarPecas(player, endCell) {
+    function cellsToChange(player, endCell) {
         let ok = [];
         let c = (player === Player.PLAYER1) ? CellState.PLAYER1 : CellState.PLAYER2;
         /* Pode jogar nesta célula? */
         for (let i = -1; i <= 1; i++) {
-            for (var j = -1; j <= 1; j++) {
+            for (let j = -1; j <= 1; j++) {
                 ok.push(oneDirection(c, endCell, i, j));
             }
         }
         return ok.flat();
     }
 
-    function executarJogada(player, endCell) {
-        let coords = mudarPecas(player, endCell);
+    function move(player, endCell) {
+        let {x, y} = endCell;
+        if ((player === Player.PLAYER2 && turn === Player.PLAYER1) || (player === Player.PLAYER1 && turn === Player.PLAYER2)) {
+            throw new Error("It's not your turn.");
+        }
+        if (!onBoard(endCell)) {
+            throw new Error("Cell is not on board.");
+        }
+        if (board[x][y] !== CellState.EMPTY) {
+            throw new Error("Cell is not empty.");
+        }
+        if (cellsToChange(player, endCell).length === 0) {
+            throw new Error("Cell does not change opponent pieces.");
+        }
+        let coords = cellsToChange(player, endCell);
         if (coords.length > 0) {
             coords.push(endCell);
-            coords.forEach(c => board[c.getX()][c.getY()] = (player === Player.PLAYER1) ? CellState.PLAYER1 : CellState.PLAYER2);
+            coords.forEach(({x, y}) => board[x][y] = (player === Player.PLAYER1) ? CellState.PLAYER1 : CellState.PLAYER2);
         }
+        return endOfGame();
     }
 
-    function mover(player, endCell) {
-        if (testarJogada(player, endCell)) {
-            executarJogada(player, endCell);
-            posJogada();
+    function totalNumberOfPiecesToCapture(player) {
+        return board.flat().reduce((acc, cur, i) => acc + ((cur === CellState.EMPTY) ? cellsToChange(player, new Cell(Math.floor(i / cols), i % cols)).length : 0), 0);
+    }
+
+    function endOfGame() {
+        let cp1 = totalNumberOfPiecesToCapture(Player.PLAYER1), cp2 = totalNumberOfPiecesToCapture(Player.PLAYER2);
+        if (countPieces(CellState.EMPTY) === 0 || (cp1 === 0 && cp2 === 0)) {
+            let qp1 = countPieces(CellState.PLAYER1), qp2 = countPieces(CellState.PLAYER2);
+            return qp1 > qp2 ? Winner.PLAYER1 : qp1 < qp2 ? Winner.PLAYER2 : Winner.DRAW;
         }
-    }
-
-    function setMessage(msg) {
-        mensagem = msg;
-    }
-
-    function getMessage() {
-        return mensagem;
-    }
-
-    function posJogada() {
-        let cp1 = casasPossiveis(Player.PLAYER1), cp2 = casasPossiveis(Player.PLAYER2);
-        if (qtdDePecas(CellState.EMPTY) === 0 || (cp1 === 0 && cp2 === 0)) {
-            let qp1 = qtdDePecas(CellState.PLAYER1), qp2 = qtdDePecas(CellState.PLAYER2);
-            setMessage(qp1 > qp2 ? "As brancas venceram." : qp1 < qp2 ? "As pretas venceram." : "Empate.");
-        } else {
-            if (turn === Player.PLAYER1) {
-                if (cp2 === 0) {
-                    setMessage("Brancas jogam novamente.");
-                } else {
-                    mudarVez();
-                    setMessage("Pretas jogam.");
-                }
-            } else {
-                if (cp1 === 0) {
-                    setMessage("Pretas jogam novamente.");
-                } else {
-                    mudarVez();
-                    setMessage("Brancas jogam.");
-                }
-            }
+        if ((turn === Player.PLAYER1 && cp2 > 0) || (turn === Player.PLAYER2 && cp1 > 0)) {
+            turn = (turn === Player.PLAYER1) ? Player.PLAYER2 : Player.PLAYER1;
         }
+        return Winner.NONE;
     }
 
     function onBoard( {x, y}) {
@@ -141,8 +103,22 @@ function Reversi(nrows, ncols) {
         }
         return onBoard(new Cell(row, col)) ? coords : [];
     }
+    function possibleMoves(player) {
+        let p = player || turn;
+        let moves = [];
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                if (board[i][j] === CellState.EMPTY) {
+                    let cell = new Cell(i, j);
+                    let num = cellsToChange(p, cell).length;
+                    moves.push(new CellMoves(cell, num));
+                }
+            }
+        }
+        return moves;
+    }
 
-    return {getBoard, mudarPecas, mover, getMessage, getTurn, qtdDePecas};
+    return {getBoard, move, getTurn, possibleMoves};
 }
 
 export {Reversi};

@@ -1,26 +1,33 @@
 import {Player} from "./Player.js";
 import {Reversi} from "./Reversi.js";
-import {Jogador} from "./Jogador.js";
+import {ComputerPlayer} from "./ComputerPlayer.js";
+import {Winner} from "./Winner.js";
 
-let tab = new Reversi(8, 8);
-let b = new Jogador(Player.PLAYER1);
-let p = new Jogador(Player.PLAYER2);
-let c, ok = true;
+let game = new Reversi(8, 8);
+let b = new ComputerPlayer(Player.PLAYER1);
+let p = new ComputerPlayer(Player.PLAYER2);
+let c, ok = true, m;
+let objs = {DRAW: "Draw!", PLAYER2: "Black's win!", PLAYER1: "White's win!"};
 while (ok) {
-    c = p.jogar(tab);
+    c = p.play(game);
     if (c) {
-        tab.mover(Player.PLAYER2, c);
-        ok = true;
+        m = game.move(Player.PLAYER2, c);
+        if (m !== Winner.NONE) {
+            break;
+        }
     } else {
         ok = false;
     }
-    c = b.jogar(tab);
+    c = b.play(game);
     if (c) {
-        tab.mover(Player.PLAYER1, c);
+        m = game.move(Player.PLAYER1, c);
+        if (m !== Winner.NONE) {
+            break;
+        }
         ok = true;
     } else {
         ok = ok || false;
     }
 }
-console.table(tab.getBoard());
-console.log(tab.getMessage());
+console.table(game.getBoard());
+console.log(objs[m]);

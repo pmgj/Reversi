@@ -4,9 +4,8 @@
         <title>Reversi</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet" type="text/css" href="index.css" />
-        <link rel="icon" type="image/svg" href="../imagens/favicon.svg" />
+        <link rel="icon" type="image/svg" href="imagens/favicon.svg" />
         <script type="module" src="GUI.js"></script>
-        <!--<script type="module" src="Test.js"></script>-->
     </head>
     <body>
         <table id="tabuleiro">
@@ -14,13 +13,13 @@
             <tbody>
             </tbody>
         </table>
-        <p>Pretas jogam.</p>
+        <p id="message"></p>
         <p>Board: <input type="number" name="rows" min="4" max="10" value="8" step="2" /> x <input type="number" name="cols" min="4" max="10" value="8" step="2" /> <input type="button" value="Start" name="start" /></p>
-        <table>
-            <caption>Pontuação</caption>
-            <tr><th>Jogador</th><th>Pontos</th></tr>
-            <tr><td>Brancas</td><td>0</td></tr>
-            <tr><td>Pretas</td><td>0</td></tr>
+        <table id="score">
+            <caption>Score</caption>
+            <tr><th>Player</th><th># of Pieces</th></tr>
+            <tr><td>White's</td><td>0</td></tr>
+            <tr><td>Black's</td><td>0</td></tr>
         </table>
     </body>
 </html>

@@ -25,3 +25,6 @@ p {
     text-align: center;
     margin: 1em auto;
 }
+#score td:nth-child(2) {
+    text-align: center;
+}
