@@ -22,7 +22,7 @@ class GUI {
         message.innerHTML = msg;
     }
     changeMessage(m) {
-        let objs = { DRAW: "Draw!", PLAYER2: "Black's win!", PLAYER1: "White's win!" };
+        let objs = { DRAW: "Draw!", PLAYER2: `${this.playerNames["PLAYER2"]}'s win!`, PLAYER1: `${this.playerNames["PLAYER1"]}'s win!` };
         if (objs[m]) {
             this.setMessage(`Game Over! ${objs[m]}`);
         } else {
