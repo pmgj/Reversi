@@ -1,4 +1,7 @@
-class Tabuleiro {
+import {Coords} from "./Coords.js";
+import {Jogador} from "./Jogador.js";
+
+export class Tabuleiro {
 
     constructor() {
         this.turn = 1;
@@ -161,12 +164,6 @@ class Tabuleiro {
         return this.posicaoValida(row, col) ? coords : [];
     }
 
-    printTabuleiro() {
-        for (let linha of this.tabuleiro) {
-            console.log(linha);
-        }
-    }
-
     static main() {
         let tab = new Tabuleiro();
         let b = new Jogador(Tabuleiro.BRANCA);
@@ -174,85 +171,23 @@ class Tabuleiro {
         let c, ok = true;
         while (ok) {
             c = p.jogar(tab);
-            if (c !== null) {
+            if (c) {
                 tab.mover(Tabuleiro.PRETA, c.getX(), c.getY());
                 ok = true;
             } else {
                 ok = false;
             }
             c = b.jogar(tab);
-            if (c !== null) {
+            if (c) {
                 tab.mover(Tabuleiro.BRANCA, c.getX(), c.getY());
                 ok = true;
             } else {
                 ok = ok || false;
             }
         }
-        tab.printTabuleiro();
+        console.table(tab.tabuleiro);
         console.log(tab.getMessage());
     }
 }
 
-class Coords {
-
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    getX() {
-        return this.x;
-    }
-
-    getY() {
-        return this.y;
-    }
-
-    toString() {
-        return `(${this.x}, ${this.y})`;
-    }
-}
-
-class Jogada {
-
-    constructor(coords, num) {
-        this.coords = coords;
-        this.num = num;
-    }
-
-    toString() {
-        return `${this.coords} : ${this.num}`;
-    }
-}
-
-class Jogador {
-
-    constructor(player) {
-        this.player = player;
-    }
-
-    jogar(tab) {
-        let jogadas = [];
-        tab.tabuleiro.forEach((row, rowIndex) => {
-            row.forEach((col, colIndex) => {
-                if (col === 0) {
-                    jogadas.push(new Jogada(new Coords(rowIndex, colIndex), tab.mudarPecas(this.player, rowIndex, colIndex).length));
-                } else {
-                    jogadas.push(new Jogada(new Coords(rowIndex, colIndex), 0));
-                }
-            });
-        });
-        jogadas.sort((a, b) => (a.num > b.num) ? -1 : (a.num < b.num ? 1 : 0));
-        let maior = jogadas[0].num;
-        if (maior === 0) {
-            return null;
-        }
-        let melhoresJogadas = jogadas.filter((elem) => elem.num === maior);
-        let best = melhoresJogadas[Math.floor(Math.random() * melhoresJogadas.length)];
-        return best.coords;
-    }
-}
-
-onload = function () {
-    Tabuleiro.main();
-};
+Tabuleiro.main();
