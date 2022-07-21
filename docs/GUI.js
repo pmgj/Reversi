@@ -30,16 +30,16 @@ class GUI {
             this.showPossibleMoves();
         }
         let td1 = document.querySelector("fieldset + table tr:nth-child(2) td:nth-child(2)");
-        td1.textContent = document.querySelectorAll("#tabuleiro img[src*='Branca']").length;
+        td1.textContent = document.querySelectorAll("#tabuleiro img[src*='White']").length;
         let td2 = document.querySelector("fieldset + table tr:nth-child(3) td:nth-child(2)");
-        td2.textContent = document.querySelectorAll("#tabuleiro img[src*='Preta']").length;
+        td2.textContent = document.querySelectorAll("#tabuleiro img[src*='Black']").length;
     }
     computerMove(obj) {
         let coords = obj.play(this.game);
         this.move(coords);
     }
-    humanMove() {
-        let coords = this.coordinates(this);
+    humanMove(ev) {
+        let coords = this.coordinates(ev.target);
         this.move(coords);
     }
     move(coords) {
@@ -91,9 +91,9 @@ class GUI {
         let iRows = document.querySelector("input[name='rows']");
         let iCols = document.querySelector("input[name='cols']");
         let bStart = document.querySelector("input[name='start']");
-        iRows.onchange = this.changeBoardSize;
-        iCols.onchange = this.changeBoardSize;
-        bStart.onclick = this.changeBoardSize;
+        iRows.onchange = this.changeBoardSize.bind(this);
+        iCols.onchange = this.changeBoardSize.bind(this);
+        bStart.onclick = this.changeBoardSize.bind(this);
         this.changeBoardSize();
         let white = document.querySelector("#white");
         let black = document.querySelector("#black");
@@ -112,10 +112,10 @@ class GUI {
             let tr = document.createElement("tr");
             for (let j = 0; j < cols; j++) {
                 let td = document.createElement("td");
-                td.innerHTML = (board[i][j] === CellState.EMPTY ? "" : (board[i][j] === CellState.PLAYER1 ? '<img src="imagens/Pedra-Branca.svg" alt="">' : '<img src="imagens/Pedra-Preta.svg" alt="">'));
+                td.innerHTML = (board[i][j] === CellState.EMPTY ? "" : (board[i][j] === CellState.PLAYER1 ? '<img src="images/White-Piece.svg" alt="">' : '<img src="images/Black-Piece.svg" alt="">'));
                 td.className = "";
                 if (board[i][j] === CellState.EMPTY) {
-                    td.onclick = this.humanMove;
+                    td.onclick = this.humanMove.bind(this);
                 }
                 tr.appendChild(td);
             }
