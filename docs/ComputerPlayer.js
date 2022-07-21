@@ -1,11 +1,9 @@
-import {Cell} from "./Cell.js";
-import {CellState} from "./CellState.js";
-
-function ComputerPlayer(p) {
-    let player = p;
-
-    function play(tab) {
-        let moves = tab.possibleMoves(player);
+export default class ComputerPlayer {
+    constructor(p) {
+        this.player = p;
+    }
+    play(game) {
+        let moves = game.possibleMoves(this.player);
         moves.sort((a, b) => b.num - a.num);
         let maior = moves[0].num;
         if (maior === 0) {
@@ -15,8 +13,7 @@ function ComputerPlayer(p) {
         let best = bestMoves[Math.floor(Math.random() * bestMoves.length)];
         return best.coords;
     }
-
-    return {play};
+    getPlayer() {
+        return this.player;
+    }
 }
-
-export {ComputerPlayer};

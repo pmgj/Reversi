@@ -20,11 +20,21 @@ table {
     color: blue;
     font-weight: bold;
 }
-p {
+#message {
     width: 50%;
     text-align: center;
     margin: 1em auto;
 }
 #score td:nth-child(2) {
     text-align: center;
+}
+fieldset {
+    width: 400px;    
+    margin: 1em auto;
+}
+fieldset p {
+    text-align: center;
+}
+fieldset input[type="number"] {
+    width: 50px;
 }

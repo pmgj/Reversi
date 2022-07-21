@@ -1,87 +1,109 @@
-import {Reversi} from "./Reversi.js";
-import {ComputerPlayer} from "./ComputerPlayer.js";
-import {CellState} from "./CellState.js";
-import {Player} from "./Player.js";
-import {Cell} from "./Cell.js";
+import Reversi from "./Reversi.js";
+import ComputerPlayer from "./ComputerPlayer.js";
+import CellState from "./CellState.js";
+import Player from "./Player.js";
+import Cell from "./Cell.js";
+import Winner from "./Winner.js";
 
-function GUI() {
-    let game, computer;
-    function coordinates(cell) {
+class GUI {
+    constructor() {
+        this.game = null;
+        this.computer1 = new ComputerPlayer(Player.PLAYER1);
+        this.computer2 = new ComputerPlayer(Player.PLAYER2);
+        this.computerWhite = null;
+        this.computerBlack = null;
+    }
+    coordinates(cell) {
         return new Cell(cell.parentNode.rowIndex, cell.cellIndex);
     }
-    function setMessage(msg) {
+    setMessage(msg) {
         let message = document.getElementById("message");
         message.innerHTML = msg;
     }
-    function changeMessage(m) {
-        let objs = {DRAW: "Draw!", PLAYER2: "Black's win!", PLAYER1: "White's win!"};
+    changeMessage(m) {
+        let objs = { DRAW: "Draw!", PLAYER2: "Black's win!", PLAYER1: "White's win!" };
         if (objs[m]) {
-            setMessage(`Game Over! ${objs[m]}`);
+            this.setMessage(`Game Over! ${objs[m]}`);
         } else {
-            let msgs = {PLAYER1: "White's turn.", PLAYER2: "Black's turn."};
-            setMessage(msgs[game.getTurn()]);
-            let td1 = document.querySelector("p + table tr:nth-child(2) td:nth-child(2)");
-            td1.textContent = document.querySelectorAll("#tabuleiro img[src*='Branca']").length;
-            let td2 = document.querySelector("p + table tr:nth-child(3) td:nth-child(2)");
-            td2.textContent = document.querySelectorAll("#tabuleiro img[src*='Preta']").length;
-            showPossibleMoves();
+            let msgs = { PLAYER1: "White's turn.", PLAYER2: "Black's turn." };
+            this.setMessage(msgs[this.game.getTurn()]);
+            this.showPossibleMoves();
         }
+        let td1 = document.querySelector("fieldset + table tr:nth-child(2) td:nth-child(2)");
+        td1.textContent = document.querySelectorAll("#tabuleiro img[src*='Branca']").length;
+        let td2 = document.querySelector("fieldset + table tr:nth-child(3) td:nth-child(2)");
+        td2.textContent = document.querySelectorAll("#tabuleiro img[src*='Preta']").length;
     }
-    function computerMove() {
-        let c = computer.play(game);
+    computerMove(obj) {
+        let coords = obj.play(this.game);
+        this.move(coords);
+    }
+    humanMove() {
+        let coords = this.coordinates(this);
+        this.move(coords);
+    }
+    move(coords) {
         try {
-            let m = game.move(Player.PLAYER1, c);
-            resetBoard();
-            changeMessage(m);
+            let m = this.game.move(this.game.getTurn(), coords);
+            this.resetBoard();
+            this.changeMessage(m);
+            if (m === Winner.NONE) {
+                this.play();
+            }
         } catch (ex) {
-            setMessage(ex.message);
+            this.setMessage(ex.message);
         }
     }
-    function play() {
-        let coords = coordinates(this);
-        try {
-            let m = game.move(game.getTurn(), coords);
-            resetBoard();
-            changeMessage(m);
-        } catch (ex) {
-            setMessage(ex.message);
-        }
-        setTimeout(computerMove, 2000);
+    play() {
+        setTimeout(() => {
+            if (this.game.getTurn() === Player.PLAYER1 && this.computerWhite) {
+                this.computerMove(this.computer1);
+            } else if (this.game.getTurn() === Player.PLAYER2 && this.computerBlack) {
+                this.computerMove(this.computer2);
+            }
+        }, 100);
     }
-    function play2() {
-        let coords = coordinates(this);
-        try {
-            let m = game.move(game.getTurn(), coords);
-            resetBoard();
-            changeMessage(m);
-        } catch (ex) {
-            setMessage(ex.message);
+    setPlayer(ev) {
+        this.updateComputerPlayer(ev.target);
+        this.play();
+    }
+    updateComputerPlayer(elem) {
+        let v = parseInt(elem.value);
+        if (elem.id === "white") {
+            this.computerWhite = (v === 1);
+        } else {
+            this.computerBlack = (v === 1);
         }
     }
-    function showPossibleMoves() {
+    showPossibleMoves() {
         let table = document.querySelector("#tabuleiro");
-        let moves = game.possibleMoves();
-        for (let {coords, num} of moves) {
+        let moves = this.game.possibleMoves();
+        for (let { coords, num } of moves) {
             if (num > 0) {
-                let {x, y} = coords;
+                let { x, y } = coords;
                 let td = table.rows[x].cells[y];
                 td.className = "selecionado";
                 td.innerHTML = num;
             }
         }
     }
-    function registerEvents() {
+    registerEvents() {
         let iRows = document.querySelector("input[name='rows']");
         let iCols = document.querySelector("input[name='cols']");
         let bStart = document.querySelector("input[name='start']");
-        iRows.onchange = changeBoardSize;
-        iCols.onchange = changeBoardSize;
-        bStart.onclick = changeBoardSize;
-        computer = new ComputerPlayer(Player.PLAYER1);
-        changeBoardSize();
+        iRows.onchange = this.changeBoardSize;
+        iCols.onchange = this.changeBoardSize;
+        bStart.onclick = this.changeBoardSize;
+        this.changeBoardSize();
+        let white = document.querySelector("#white");
+        let black = document.querySelector("#black");
+        white.onchange = this.setPlayer.bind(this);
+        black.onchange = this.setPlayer.bind(this);
+        this.updateComputerPlayer(white);
+        this.updateComputerPlayer(black);
     }
-    function resetBoard() {
-        let board = game.getBoard();
+    resetBoard() {
+        let board = this.game.getBoard();
         let rows = board.length;
         let cols = board[0].length;
         let tbody = document.querySelector("tbody");
@@ -93,23 +115,23 @@ function GUI() {
                 td.innerHTML = (board[i][j] === CellState.EMPTY ? "" : (board[i][j] === CellState.PLAYER1 ? '<img src="imagens/Pedra-Branca.svg" alt="">' : '<img src="imagens/Pedra-Preta.svg" alt="">'));
                 td.className = "";
                 if (board[i][j] === CellState.EMPTY) {
-                    td.onclick = play;
+                    td.onclick = this.humanMove;
                 }
                 tr.appendChild(td);
             }
             tbody.appendChild(tr);
         }
     }
-    function changeBoardSize() {
+    changeBoardSize() {
         let iRows = document.querySelector("input[name='rows']");
         let iCols = document.querySelector("input[name='cols']");
         let cols = parseInt(iCols.value);
         let rows = parseInt(iRows.value);
-        game = new Reversi(rows, cols);
-        resetBoard();
-        changeMessage();
+        this.game = new Reversi(rows, cols);
+        this.resetBoard();
+        this.changeMessage();
+        this.play();
     }
-    return {registerEvents};
 }
 let gui = new GUI();
 gui.registerEvents();

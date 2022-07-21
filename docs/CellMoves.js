@@ -1,4 +1,4 @@
-export class CellMoves {
+export default class CellMoves {
 
     constructor(coords, num) {
         this.coords = coords;
