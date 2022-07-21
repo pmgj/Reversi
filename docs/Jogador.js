@@ -1,30 +1,23 @@
 import {Jogada} from "./Jogada.js";
-import {Coords} from "./Coords.js";
+import {Cell} from "./Cell.js";
+import {CellState} from "./CellState.js";
 
-export class Jogador {
+function Jogador(p) {
+    let player = p;
 
-    constructor(player) {
-        this.player = player;
-    }
-
-    jogar(tab) {
-        let jogadas = [];
-        tab.tabuleiro.forEach((row, rowIndex) => {
-            row.forEach((col, colIndex) => {
-                if (col === 0) {
-                    jogadas.push(new Jogada(new Coords(rowIndex, colIndex), tab.mudarPecas(this.player, rowIndex, colIndex).length));
-                } else {
-                    jogadas.push(new Jogada(new Coords(rowIndex, colIndex), 0));
-                }
-            });
-        });
-        jogadas.sort((a, b) => (a.num > b.num) ? -1 : (a.num < b.num ? 1 : 0));
+    function jogar(tab) {
+        let jogadas = tab.getBoard().flat().map((c, i) => new Jogada(new Cell(Math.floor(i / 8), i % 8), c === CellState.EMPTY ? tab.mudarPecas(player, new Cell(Math.floor(i / 8), i % 8)).length : 0));
+        jogadas.sort((a, b) => b.num - a.num);
         let maior = jogadas[0].num;
         if (maior === 0) {
             return null;
         }
-        let melhoresJogadas = jogadas.filter((elem) => elem.num === maior);
+        let melhoresJogadas = jogadas.filter(elem => elem.num === maior);
         let best = melhoresJogadas[Math.floor(Math.random() * melhoresJogadas.length)];
         return best.coords;
     }
+
+    return {jogar};
 }
+
+export {Jogador};

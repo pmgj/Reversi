@@ -1,25 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Reversi</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet" type="text/css" href="index.css" />
         <link rel="icon" type="image/svg" href="../imagens/favicon.svg" />
         <script type="module" src="GUI.js"></script>
+        <!--<script type="module" src="Test.js"></script>-->
     </head>
     <body>
         <table id="tabuleiro">
             <caption>Reversi</caption>
-            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tbody>
+            </tbody>
         </table>
         <p>Pretas jogam.</p>
+        <p>Board: <input type="number" name="rows" min="4" max="10" value="8" step="2" /> x <input type="number" name="cols" min="4" max="10" value="8" step="2" /> <input type="button" value="Start" name="start" /></p>
         <table>
             <caption>Pontuação</caption>
             <tr><th>Jogador</th><th>Pontos</th></tr>
