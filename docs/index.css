@@ -6,16 +6,16 @@ caption {
 table {
     margin: 0 auto;
 }
-#tabuleiro td {
+#board td {
     width: 49px;
     height: 49px;
     border: 3px solid black;
     text-align: center;
 }
-#tabuleiro tr:nth-child(2n+1) td:nth-child(2n), #tabuleiro tr:nth-child(2n) td:nth-child(2n+1) {
+#board tr:nth-child(2n+1) td:nth-child(2n), #board tr:nth-child(2n) td:nth-child(2n+1) {
     background-color: gray;
 }
-#tabuleiro .selecionado {
+#board .selecionado {
     border: 3px solid blue;
     color: blue;
     font-weight: bold;

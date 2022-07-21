@@ -12,6 +12,7 @@ class GUI {
         this.computer2 = new ComputerPlayer(Player.PLAYER2);
         this.computerWhite = null;
         this.computerBlack = null;
+        this.playerNames = { PLAYER1: "White", PLAYER2: "Black" };
     }
     coordinates(cell) {
         return new Cell(cell.parentNode.rowIndex, cell.cellIndex);
@@ -25,14 +26,14 @@ class GUI {
         if (objs[m]) {
             this.setMessage(`Game Over! ${objs[m]}`);
         } else {
-            let msgs = { PLAYER1: "White's turn.", PLAYER2: "Black's turn." };
+            let msgs = { PLAYER1: `${this.playerNames["PLAYER1"]}'s turn.`, PLAYER2: `${this.playerNames["PLAYER2"]}'s turn.` };
             this.setMessage(msgs[this.game.getTurn()]);
             this.showPossibleMoves();
         }
         let td1 = document.querySelector("fieldset + table tr:nth-child(2) td:nth-child(2)");
-        td1.textContent = document.querySelectorAll("#tabuleiro img[src*='White']").length;
+        td1.textContent = document.querySelectorAll(`#board img[src*='${this.playerNames["PLAYER1"]}']`).length;
         let td2 = document.querySelector("fieldset + table tr:nth-child(3) td:nth-child(2)");
-        td2.textContent = document.querySelectorAll("#tabuleiro img[src*='Black']").length;
+        td2.textContent = document.querySelectorAll(`#board img[src*='${this.playerNames["PLAYER2"]}']`).length;
     }
     computerMove(obj) {
         let coords = obj.play(this.game);
@@ -76,7 +77,7 @@ class GUI {
         }
     }
     showPossibleMoves() {
-        let table = document.querySelector("#tabuleiro");
+        let table = document.querySelector("#board");
         let moves = this.game.possibleMoves();
         for (let { coords, num } of moves) {
             if (num > 0) {
@@ -101,6 +102,9 @@ class GUI {
         black.onchange = this.setPlayer.bind(this);
         this.updateComputerPlayer(white);
         this.updateComputerPlayer(black);
+        let temp = document.querySelectorAll("#score td:first-child");
+        temp[0].textContent = `${this.playerNames["PLAYER1"]}'s`;
+        temp[1].textContent = `${this.playerNames["PLAYER2"]}'s`;
     }
     resetBoard() {
         let board = this.game.getBoard();
@@ -112,7 +116,7 @@ class GUI {
             let tr = document.createElement("tr");
             for (let j = 0; j < cols; j++) {
                 let td = document.createElement("td");
-                td.innerHTML = (board[i][j] === CellState.EMPTY ? "" : (board[i][j] === CellState.PLAYER1 ? '<img src="images/White-Piece.svg" alt="">' : '<img src="images/Black-Piece.svg" alt="">'));
+                td.innerHTML = (board[i][j] === CellState.EMPTY ? "" : `<img src="images/${board[i][j] === CellState.PLAYER1 ? this.playerNames["PLAYER1"] : this.playerNames["PLAYER2"]}-Piece.svg" alt="">`);
                 td.className = "";
                 if (board[i][j] === CellState.EMPTY) {
                     td.onclick = this.humanMove.bind(this);
