@@ -1,40 +1,69 @@
+body {
+    --td-size: 49px;
+    --td-border: 3px;
+    --td-color-selected: blue;
+    --img-size: 45px;
+}
+
 caption {
     text-align: center;
     font-weight: bold;
     font-size: xx-large;
 }
+
 table {
     margin: 0 auto;
 }
+
 #board td {
-    width: 49px;
-    height: 49px;
-    border: 3px solid black;
+    width: var(--td-size);
+    height: var(--td-size);
+    border: var(--td-border) solid black;
     text-align: center;
 }
-#board tr:nth-child(2n+1) td:nth-child(2n), #board tr:nth-child(2n) td:nth-child(2n+1) {
+
+#board tr:nth-child(2n+1) td:nth-child(2n),
+#board tr:nth-child(2n) td:nth-child(2n+1) {
     background-color: gray;
 }
+
 #board .selecionado {
-    border: 3px solid blue;
-    color: blue;
+    border: var(--td-border) solid var(--td-color-selected);
+    color: var(--td-color-selected);
     font-weight: bold;
 }
+
 #message {
     width: 50%;
     text-align: center;
     margin: 1em auto;
 }
+
 #score td:nth-child(2) {
     text-align: center;
 }
+
 fieldset {
-    width: 400px;    
+    width: 300px;
     margin: 1em auto;
 }
+
 fieldset p {
     text-align: center;
 }
+
 fieldset input[type="number"] {
     width: 50px;
+}
+
+img {
+    width: var(--img-size);
+    height: var(--img-size);
+}
+
+@media (max-width: 360px) {
+    body {
+        --td-size: 30px;
+        --img-size: 20px;
+    }
 }
