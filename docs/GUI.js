@@ -129,8 +129,8 @@ class GUI {
     changeBoardSize() {
         let iRows = document.querySelector("input[name='rows']");
         let iCols = document.querySelector("input[name='cols']");
-        let cols = parseInt(iCols.value);
-        let rows = parseInt(iRows.value);
+        let cols = iCols.valueAsNumber;
+        let rows = iRows.valueAsNumber;
         this.game = new Reversi(rows, cols);
         this.resetBoard();
         this.changeMessage();
