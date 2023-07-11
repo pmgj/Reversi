@@ -55,7 +55,7 @@ class GUI {
                 this.setMessage("");
                 this.clearBoard();
                 let img = document.getElementById("playerPiece");
-                img.src = `imagens/${this.images[this.player]}`;
+                img.src = `images/${this.images[this.player]}`;
                 break;
             case "MESSAGE":
                 this.printBoard(data.board);
