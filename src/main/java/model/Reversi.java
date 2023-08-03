@@ -42,7 +42,7 @@ public class Reversi {
         if (!isValidCell(endCell)) {
             throw new IllegalArgumentException("Cell is not on board.");
         }
-        if (board[endCell.getX()][endCell.getY()] != CellState.EMPTY) {
+        if (board[endCell.x()][endCell.y()] != CellState.EMPTY) {
             throw new IllegalArgumentException("Cell is not not empty.");
         }
         int[][] directions = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}, {-1, -1}, {1, 1}, {-1, 1}, {1, -1}};
@@ -75,7 +75,7 @@ public class Reversi {
 
     private boolean oneDirection(Player player, Cell cell, int h, int v) {
         boolean ok = false;
-        int row = cell.getX() + v, col = cell.getY() + h;
+        int row = cell.x() + v, col = cell.y() + h;
         List<Cell> coords = new ArrayList<>();
         while (isValidCell(new Cell(row, col))) {
             if ((board[row][col] == CellState.PLAYER1 && player == Player.PLAYER1)
@@ -93,13 +93,13 @@ public class Reversi {
         if (isValidCell(new Cell(row, col)) && !coords.isEmpty()) {
             ok = true;
             coords.add(cell);
-            coords.forEach(c -> board[c.getX()][c.getY()] = (player == Player.PLAYER1) ? CellState.PLAYER1 : CellState.PLAYER2);
+            coords.forEach(c -> board[c.x()][c.y()] = (player == Player.PLAYER1) ? CellState.PLAYER1 : CellState.PLAYER2);
         }
         return ok;
     }
 
     private boolean isValidCell(Cell cell) {
-        return (cell.getX() < rows && cell.getX() >= 0 && cell.getY() < cols && cell.getY() >= 0);
+        return (cell.x() < rows && cell.x() >= 0 && cell.y() < cols && cell.y() >= 0);
     }
 
     public Player getTurn() {
