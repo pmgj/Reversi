@@ -3,25 +3,24 @@
 
 <head>
     <title>Reversi</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />    
-    <link rel="stylesheet" type="text/css" href="index.css" />
-    <link rel="icon" type="image/svg" href="images/favicon.svg" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="icon" type="image/svg" href="images/favicon.svg">
     <script type="module" src="GUI.js"></script>
 </head>
 
 <body>
     <table id="board">
         <caption>Reversi</caption>
-        <tbody>
-        </tbody>
+        <tbody></tbody>
     </table>
     <p id="message"></p>
     <fieldset>
         <legend>Options:</legend>
         <p><label for="rows">Board:</label> <input type="number" id="rows" name="rows" min="4" max="10" value="8"
-                step="2" /> x <input type="number" name="cols" min="4" max="10" value="8" step="2" /> <input
-                type="button" value="Start" name="start" /></p>
+                step="2"> x <input type="number" name="cols" min="4" max="10" value="8" step="2"> <input
+                type="button" value="Start" name="start"></p>
         <p>
             <label for="white">White's:</label>
             <select id="white">
