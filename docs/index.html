@@ -5,41 +5,64 @@
     <title>Reversi</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="index.css">
     <link rel="icon" type="image/svg" href="images/favicon.svg">
-    <script type="module" src="GUI.js"></script>
+    <script type="module" src="scripts/GUI.js"></script>
 </head>
 
 <body>
     <table id="board">
-        <caption>Reversi</caption>
+        <caption class="caption-top text-black">Reversi</caption>
         <tbody></tbody>
     </table>
-    <p id="message"></p>
-    <fieldset>
-        <legend>Options:</legend>
-        <p><label for="rows">Board:</label> <input type="number" id="rows" name="rows" min="4" max="10" value="8"
-                step="2"> x <input type="number" name="cols" min="4" max="10" value="8" step="2"> <input
-                type="button" value="Start" name="start"></p>
-        <p>
-            <label for="white">White's:</label>
-            <select id="white">
-                <option value="0">Human</option>
-                <option value="1">Computer</option>
-            </select>
-            <label for="black">Black's:</label>
-            <select id="black">
-                <option value="0">Human</option>
-                <option value="1">Computer</option>
-            </select>
-        </p>
-    </fieldset>
-    <table id="score">
-        <caption>Score</caption>
+    <form class="container-sm mt-3">
+        <div class="d-flex justify-content-center mt-2">
+            <div class="p-1 mt-2">
+                <label for="rows" class="col col-form-label">Board:</label>
+            </div>
+            <div class="p-1">
+                <input type="number" id="rows" name="rows" min="4" max="10" value="8" step="2" class="form-control">
+            </div>
+            <div class="p-1 mt-2">
+                x
+            </div>
+            <div class="p-1">
+                <input type="number" name="cols" min="4" max="10" value="8" step="2" class="form-control">
+            </div>
+            <div class="p-1">
+                <input type="button" value="Start" name="start" class="btn btn-primary">
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-2">
+            <div class="p-1 mt-1">
+                <label for="white" class="col col-form-label">White's:</label>
+            </div>
+            <div class="p-1">
+                <select id="white" class="form-select">
+                    <option value="0">Human</option>
+                    <option value="1">Computer</option>
+                </select>
+            </div>
+            <div class="p-1">
+                <label for="black" class="col col-form-label">Black's:</label>
+            </div>
+            <div class="p-1">
+                <select id="black" class="form-select">
+                    <option value="0">Human</option>
+                    <option value="1">Computer</option>
+                </select>
+            </div>
+        </div>
+        <p id="message"></p>
+    </form>
+    <table id="score" class="table">
+        <caption class="caption-top">Score</caption>
         <tbody>
             <tr>
-                <th>Player</th>
-                <th># of Pieces</th>
+                <th class="table-dark">Player</th>
+                <th class="table-dark"># of Pieces</th>
             </tr>
             <tr>
                 <td></td>

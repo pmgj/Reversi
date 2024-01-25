@@ -30,9 +30,9 @@ class GUI {
             this.setMessage(msgs[this.game.getTurn()]);
             this.showPossibleMoves();
         }
-        let td1 = document.querySelector("fieldset + table tr:nth-child(2) td:nth-child(2)");
+        let td1 = document.querySelector("#score tr:nth-child(2) td:nth-child(2)");
         td1.textContent = document.querySelectorAll(`#board img[src*='${this.playerNames["PLAYER1"]}']`).length;
-        let td2 = document.querySelector("fieldset + table tr:nth-child(3) td:nth-child(2)");
+        let td2 = document.querySelector("#score tr:nth-child(3) td:nth-child(2)");
         td2.textContent = document.querySelectorAll(`#board img[src*='${this.playerNames["PLAYER2"]}']`).length;
     }
     computerMove(obj) {

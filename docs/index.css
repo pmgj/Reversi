@@ -1,8 +1,6 @@
 body {
-    --td-size: 49px;
     --td-border: 3px;
     --td-color-selected: blue;
-    --img-size: 45px;
 }
 
 caption {
@@ -13,11 +11,22 @@ caption {
 
 table {
     margin: 0 auto;
+    border-collapse: separate;
+}
+
+.container-sm {
+    max-width: 500px;
 }
 
 #board td {
-    width: var(--td-size);
-    height: var(--td-size);
+    --cell-size: 8vmin;
+    --min-size: 40px;
+    --max-size: 60px;
+    width: clamp(var(--min-size), var(--cell-size), var(--max-size));
+    height: clamp(var(--min-size), var(--cell-size), var(--max-size));
+}
+
+#board td {
     border: var(--td-border) solid black;
     text-align: center;
 }
@@ -43,27 +52,19 @@ table {
     text-align: center;
 }
 
-fieldset {
-    width: 300px;
-    margin: 1em auto;
-}
-
-fieldset p {
-    text-align: center;
-}
-
-fieldset input[type="number"] {
-    width: 50px;
-}
-
 img {
-    width: var(--img-size);
-    height: var(--img-size);
+    width: 90%;
 }
 
-@media (max-width: 360px) {
-    body {
-        --td-size: 30px;
-        --img-size: 20px;
-    }
+#score {
+    max-width: 200px;
+}
+
+#score caption {
+    font-weight: bold;
+    font-size: large;
+}
+
+#score td {
+    text-align: center;
 }
